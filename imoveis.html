@@ -1,0 +1,223 @@
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todos os Imóveis - AF Imobiliária</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1d1b1a;
+        }
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .card-animation {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .card-animation.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .no-results {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-stone-900 text-gray-100 bg-gradient-to-br from-stone-950 to-stone-900">
+
+    <nav class="bg-gradient-to-br from-stone-950 to-stone-900 shadow-lg w-full z-20 fixed top-0">
+        <div class="container mx-auto px-4 py-2 flex justify-between items-center">
+            <a href="inicio.htm" class="text-lg font-extrabold text-amber-500 tracking-wider">
+                AF Imobiliária
+            </a>
+            <div class="hidden md:flex space-x-4">
+                <a href="inicio.htm" class="text-sm text-gray-300 hover:text-amber-500 transition-colors duration-300 font-semibold">Voltar para a Home</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-gray-300 hover:text-amber-500 focus:outline-none">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-stone-950 px-4 pb-2">
+            <a href="inicio.htm" class="block py-1 text-sm text-gray-300 hover:text-amber-500 transition-colors duration-300 font-semibold">Voltar para a Home</a>
+        </div>
+    </nav>
+    
+    <header class="pt-20 pb-8 text-center">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-100">Todos os Imóveis</h1>
+        <p class="mt-2 text-gray-300 max-w-lg mx-auto text-base">
+            Explore nossa seleção completa de casas, apartamentos e terrenos e use os filtros para encontrar o imóvel perfeito.
+        </p>
+    </header>
+
+    <section id="filters" class="container mx-auto px-4 mb-8">
+        <div class="bg-stone-900 p-4 rounded-xl shadow-xl border border-stone-800">
+            <h2 class="text-lg font-bold text-gray-100 mb-3">Filtrar Imóveis</h2>
+            <form id="filter-form" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                <div class="md:col-span-2">
+                    <label for="keyword" class="block text-sm font-medium text-gray-300 mb-1">Palavra-chave</label>
+                    <input type="text" id="keyword" placeholder="Ex: Piscina, Centro..." class="w-full p-2 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-400 text-sm">
+                </div>
+                <div>
+                    <label for="code" class="block text-sm font-medium text-gray-300 mb-1">Código do Imóvel</label>
+                    <input type="number" id="code" placeholder="Ex: 1234" class="w-full p-2 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-400 text-sm">
+                </div>
+                <div>
+                    <label for="type" class="block text-sm font-medium text-gray-300 mb-1">Tipo de Imóvel</label>
+                    <select id="type" class="w-full p-2 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-400 text-sm">
+                        <option value="all">Todos</option>
+                        <option value="casa">Casa</option>
+                        <option value="apartamento">Apartamento</option>
+                        <option value="terreno">Terreno</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="rooms" class="block text-sm font-medium text-gray-300 mb-1">Quartos (Mínimo)</label>
+                    <select id="rooms" class="w-full p-2 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-400 text-sm">
+                        <option value="0">Qualquer</option>
+                        <option value="1">1+</option>
+                        <option value="2">2+</option>
+                        <option value="3">3+</option>
+                        <option value="4">4+</option>
+                    </select>
+                </div>
+                <div class="md:col-span-2">
+                    <label for="min-price" class="block text-sm font-medium text-gray-300 mb-1">Preço Mín/Máx</label>
+                    <div class="flex space-x-2">
+                        <input type="number" id="min-price" placeholder="R$ Mín" class="w-1/2 p-2 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-400 text-sm">
+                        <input type="number" id="max-price" placeholder="R$ Máx" class="w-1/2 p-2 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-400 text-sm">
+                    </div>
+                </div>
+                <div class="md:col-span-5 flex justify-end gap-2 mt-2">
+                    <button type="button" id="search-button" class="bg-amber-600 text-white font-semibold py-1.5 px-4 rounded-full shadow-md hover:bg-amber-500 transition-colors duration-300 transform hover:scale-105 text-sm">
+                        Buscar Imóveis
+                    </button>
+                    <button type="button" id="reset-button" class="bg-gray-600 text-white font-semibold py-1.5 px-4 rounded-full shadow-md hover:bg-gray-500 transition-colors duration-300 transform hover:scale-105 text-sm">
+                        Limpar Filtros
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <main class="container mx-auto px-4 py-6">
+        <div id="property-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            </div>
+        <div id="no-results" class="no-results text-center py-8 text-gray-400 text-base">
+            Nenhum imóvel encontrado com os critérios de busca.
+        </div>
+    </main>
+
+    <footer class="bg-gradient-to-br from-stone-950 to-stone-900 text-white py-4">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-xs">&copy; 2025 AF Imobiliária. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="imoveis-data.js"></script>
+
+    <script>
+        const propertyList = document.getElementById('property-list');
+        const noResults = document.getElementById('no-results');
+        const keywordInput = document.getElementById('keyword');
+        const codeInput = document.getElementById('code'); // Novo input para o código
+        const typeSelect = document.getElementById('type');
+        const roomsSelect = document.getElementById('rooms');
+        const minPriceInput = document.getElementById('min-price');
+        const maxPriceInput = document.getElementById('max-price');
+        const searchButton = document.getElementById('search-button');
+        const resetButton = document.getElementById('reset-button');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        function renderProperties(filteredProperties) {
+            propertyList.innerHTML = '';
+            if (filteredProperties.length === 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+                filteredProperties.forEach((property, index) => {
+                    const cardHtml = `
+                        <div class="bg-stone-800 rounded-xl shadow-lg overflow-hidden transform transition duration-500 hover:scale-105 hover:shadow-2xl card-animation" style="transition-delay: ${index * 0.1}s;">
+                            <img src="${property.image}" alt="${property.title}" class="w-full h-48 object-cover">
+                            <div class="p-4">
+                                <span class="bg-amber-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full inline-block mb-2">Cód: ${property.id}</span>
+                                <h3 class="text-base font-bold text-gray-100">${property.title}</h3>
+                                <p class="mt-1 text-gray-300 text-xs">${property.description}</p>
+                                <p class="mt-2 text-amber-500 font-bold text-lg">R$ ${property.price.toLocaleString('pt-BR')}</p>
+                                <a href="detalhes.html?id=${property.id}" class="mt-2 block text-center bg-amber-600 text-white font-semibold py-1.5 px-3 rounded-lg hover:bg-amber-500 transition-colors duration-300 text-sm">
+                                    Ver Detalhes
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    propertyList.innerHTML += cardHtml;
+                });
+                
+                const faders = document.querySelectorAll('.card-animation');
+                const appearOptions = { threshold: 0.2 };
+                const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, appearOptions);
+                faders.forEach(fader => {
+                    appearOnScroll.observe(fader);
+                });
+            }
+        }
+        
+        function filterProperties() {
+            const keyword = keywordInput.value.toLowerCase();
+            const code = codeInput.value; // Pega o valor do novo campo de código
+            const type = typeSelect.value;
+            const rooms = parseInt(roomsSelect.value);
+            const minPrice = parseFloat(minPriceInput.value) || 0;
+            const maxPrice = parseFloat(maxPriceInput.value) || Infinity;
+
+            const filtered = imoveis.filter(property => {
+                const matchesKeyword = property.keyword.includes(keyword) || property.title.toLowerCase().includes(keyword) || property.description.toLowerCase().includes(keyword);
+                
+                // Nova lógica para o código
+                const matchesCode = !code || property.id.toString() === code;
+                
+                const matchesType = type === 'all' || property.type === type;
+                const matchesRooms = property.rooms >= rooms;
+                const matchesPrice = property.price >= minPrice && property.price <= maxPrice;
+
+                return matchesKeyword && matchesCode && matchesType && matchesRooms && matchesPrice;
+            });
+
+            renderProperties(filtered);
+        }
+
+        function resetFilters() {
+            keywordInput.value = '';
+            codeInput.value = ''; // Limpa o campo de código
+            typeSelect.value = 'all';
+            roomsSelect.value = '0';
+            minPriceInput.value = '';
+            maxPriceInput.value = '';
+            filterProperties();
+        }
+
+        searchButton.addEventListener('click', filterProperties);
+        resetButton.addEventListener('click', resetFilters);
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProperties(imoveis); 
+        });
+    </script>
+</body>
+</html>
